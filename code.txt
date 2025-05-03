@@ -1,0 +1,15 @@
+# 安装pcl_viewer
+sudo apt install pcl-tools
+
+# 查看保存的点云文件
+pcl_viewer output.pcd
+
+# 清理旧编译
+rm -rf ~/pcl_ws/build ~/pcl_ws/install ~/pcl_ws/log
+
+# 重新编译
+cd ~/pcl_ws && colcon build --symlink-install
+
+# 运行节点
+source install/setup.bash
+ros2 run video_to_pcl video_to_pcl_node --ros-args -p video_path:=input.mp4

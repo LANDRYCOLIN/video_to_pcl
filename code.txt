@@ -13,3 +13,12 @@ cd ~/pcl_ws && colcon build --symlink-install
 # 运行节点
 source install/setup.bash
 ros2 run video_to_pcl video_to_pcl_node --ros-args -p video_path:=input.mp4
+
+export http_proxy="http://192.168.56.1:7890"
+export https_proxy="http://192.168.56.1:7890"
+export socks_proxy="socks5://192.168.56.1:7891"
+
+echo 'export http_proxy="http://192.168.56.1:7890"' >> ~/.bashrc
+echo 'export https_proxy="http://192.168.56.1:7890"' >> ~/.bashrc
+echo 'export socks_proxy="socks5://192.168.56.1:7891"' >> ~/.bashrc
+source ~/.bashrc  # 使配置生效

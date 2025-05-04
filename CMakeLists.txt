@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(pcl_conversions REQUIRED)
+find_package(ament_index_cpp REQUIRED)  # 添加这一行
 
 # 关键修复：查找pcl_ros包并指定组件
 find_package(pcl_ros REQUIRED COMPONENTS pcl_ros)
@@ -35,6 +36,7 @@ ament_target_dependencies(video_to_pcl_node
   cv_bridge
   pcl_conversions
   pcl_ros  # 直接依赖pcl_ros包
+  ament_index_cpp  # 添加这一行
 )
 
 # 手动链接OpenCV和PCL基础库
@@ -43,9 +45,15 @@ target_link_libraries(video_to_pcl_node
   ${PCL_LIBRARIES}
 )
 
-# 安装配置
+# 安装可执行文件
 install(TARGETS video_to_pcl_node
   DESTINATION lib/${PROJECT_NAME}
+)
+
+# 安装模型文件夹
+install(DIRECTORY
+  models/
+  DESTINATION share/${PROJECT_NAME}/models/
 )
 
 # 导出ament依赖

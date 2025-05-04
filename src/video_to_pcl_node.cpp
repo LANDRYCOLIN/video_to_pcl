@@ -6,7 +6,9 @@
 #include <pcl/point_types.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <opencv2/opencv.hpp>
+#include <ament_index_cpp/get_package_share_directory.hpp>  // 添加这一行
 #include <cmath>
+#include <filesystem>
 #include "utils.hpp"
 
 class VideoToPclNode : public rclcpp::Node {
@@ -14,7 +16,24 @@ public:
     VideoToPclNode() : Node("video_to_pcl_node") {
         declare_parameter("video_path", "input.mp4");
         declare_parameter("output_cloud", "output.pcd");
+        
+        // 使用正确的模型路径
+        std::string pkg_share_dir = ament_index_cpp::get_package_share_directory("video_to_pcl");
+        std::string model_path = pkg_share_dir + "/models/model-small.onnx";
+        
+        // 检查安装目录中的模型文件是否存在
+        if (!std::filesystem::exists(model_path)) {
+            // 如果安装目录中没有，尝试从源代码目录加载
+            model_path = "/home/radar/pcl_ws/src/video_to_pcl/models/model-small.onnx";
+            RCLCPP_INFO(get_logger(), "尝试从源代码目录加载模型: %s", model_path.c_str());
+        }
+        
         RCLCPP_INFO(get_logger(), "节点初始化完成");
+        RCLCPP_INFO(get_logger(), "模型路径: %s", model_path.c_str());
+        
+        // 设置模型路径
+        set_model_path(model_path);
+        
         process_video();
     }
 
